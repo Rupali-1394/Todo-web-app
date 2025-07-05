@@ -52,10 +52,10 @@
             </div>
         </div>
     </nav>
-       <div class="container">
+    <div class="container">
         <form action="/" method="POST">
             <div class="mb-3">
-                <h1 >ToDo</h1>
+                <h1>ToDo</h1>
                 <label for="title" class="form-label">Add your task</label>
                 <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp">
             </div>
@@ -76,6 +76,7 @@
                     <th scope="col">Title</th>
                     <th scope="col">Description</th>
                     <th scope="col">Time</th>
+                    <th scope="col">Activity</th>
                 </tr>
             </thead>
             <tbody>{% for todo in allTodo %}
@@ -84,9 +85,15 @@
                     <td>{{todo.title}}</td>
                     <td>{{todo.desc}}</td>
                     <td>{{todo.date_created}}</td>
+                    <td>
+                        <a href="/done/{{todo.sno}}" type="button"
+                            class="btn btn-outline-dark btn-sm mx-1">Done</button>
+                        <a href="/Delete/{{todo.sno}}" type="button"
+                            class="btn btn-outline-dark btn-sm mx-1">Delete</button>
+                    </td>
                 </tr>
-            {% endfor %}
-                
+                {% endfor %}
+
             </tbody>
         </table>
     </div>

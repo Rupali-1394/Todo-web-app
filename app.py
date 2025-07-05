@@ -36,6 +36,18 @@ def products():
     allTodo = Todo.query.all()
     print(allTodo)
     return 'this is products page'
+@app.route("/done")
+def done():
+    allTodo = Todo.query.all()
+    print(allTodo)
+    return 'this is products page'
+@app.route("/delete/<int:sno>")
+def delete(sno):
+    todo = Todo.query.filter_by(sno=sno)
+    db.session.delete()
+    db.session.commit()
+    print(todo)
+    return 'this is products page'
 
 if __name__ == '__main__':
     app.run(debug=True, port= 5000)

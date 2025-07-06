@@ -14,7 +14,7 @@ Welcome to **Smart ToDo**, a powerful productivity-focused web app designed to h
 
 ---
 
-### 💡 Unique & Interview-Worthy Features
+### 💡 Unique Features
 
 #### 🔮 Smart Scheduler
 > Calculates how many hours/day you need to finish a task before its deadline.

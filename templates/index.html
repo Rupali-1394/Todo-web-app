@@ -1,107 +1,59 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My ToDo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-</head>
-
-<body>
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">My ToDo</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">All Task</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Completed Task</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
+{% extends 'base.html' %}
+{% block title %}Home {% endblock title %}
+{% block body %}
+ 
+<div class="container">
+    <h1>ToDo</h1>
+    <form action="/" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Add your task</label>
+            <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp">
         </div>
-    </nav>
-    <div class="container">
-        <form action="/" method="POST">
-            <div class="mb-3">
-                <h1>ToDo</h1>
-                <label for="title" class="form-label">Add your task</label>
-                <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label for="desc" class="form-label">todo Description</label>
-                <input type="text" class="form-control" name='desc' id="desc">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
+        <div class="mb-3">
+            <label for="desc" class="form-label">todo Description</label>
+            <input type="text" class="form-control" name='desc' id="desc">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<div class="container">
+    <h1>Your ToDos</h1>
+    {% if allTodo|length == 0 %}
+    <div class="alert alert-dark" role="alert">
+        No Todos found. Add your first todo now!
     </div>
-    <div class="container">
-        <h1>Your ToDos</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">SNo</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Activity</th>
-                </tr>
-            </thead>
-            <tbody>{% for todo in allTodo %}
-                <tr>
-                    <th scope="row">{{loop.index}}</th>
-                    <td>{{todo.title}}</td>
-                    <td>{{todo.desc}}</td>
-                    <td>{{todo.date_created}}</td>
-                    <td>
-                        <a href="/done/{{todo.sno}}" type="button"
-                            class="btn btn-outline-dark btn-sm mx-1">Done</button>
-                        <a href="/Delete/{{todo.sno}}" type="button"
-                            class="btn btn-outline-dark btn-sm mx-1">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
+    {% else %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">SNo</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Time</th>
+                <th scope="col">Activity</th>
+            </tr>
+        </thead>
 
-            </tbody>
-        </table>
-    </div>
-    </div>
+        <tbody>{% for todo in allTodo %}
+            <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{todo.title}}</td>
+                <td>{{todo.desc}}</td>
+                <td>{{todo.date_created}}</td>
+                <td>
+                    <a href="/update/{{todo.sno}}" type="button" class="btn btn-outline-dark btn-sm mx-1">Update</button>
+                    <a href="/delete/{{todo.sno}}" type="button" class="btn btn-outline-dark btn-sm mx-1">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
-</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
 
-</html>
+{% endblock body %}

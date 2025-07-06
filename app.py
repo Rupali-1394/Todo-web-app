@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -23,6 +23,7 @@ def hello_world():
         desc = request.form['desc']
         todo = Todo(title=title, desc=desc)
         db.session.add(todo)
+        db.session.commit()
         print(request.form['title'])
     # todo = Todo(title="Start studying hard for Microsoft", desc="You have to pass the exam")
     # db.session.add(todo)
@@ -36,18 +37,28 @@ def products():
     allTodo = Todo.query.all()
     print(allTodo)
     return 'this is products page'
-@app.route("/done")
-def done():
-    allTodo = Todo.query.all()
-    print(allTodo)
-    return 'this is products page'
+
+@app.route("/update/<int:sno>", methods=['GET', 'POST'])
+def update(sno):
+    if request.method == 'POST':
+        title = request.form['title']
+        desc = request.form['desc']
+        todo = Todo.query.filter_by(sno=sno).first()
+        todo.title = title
+        todo.desc = desc
+        db.session.add(todo)
+        db.session.commit()
+        return redirect('/')
+    todo = Todo.query.filter_by(sno=sno).first()  
+    return render_template('update.html', todo=todo)
+
 @app.route("/delete/<int:sno>")
 def delete(sno):
-    todo = Todo.query.filter_by(sno=sno)
-    db.session.delete()
+    todo = Todo.query.filter_by(sno=sno).first()
+    db.session.delete(todo)
     db.session.commit()
     print(todo)
-    return 'this is products page'
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True, port= 5000)

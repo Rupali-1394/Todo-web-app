@@ -12,6 +12,7 @@ class Todo(db.Model):
     title = db.Column(db.String(200), nullable=False)
     desc = db.Column(db.String(500), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    completed = db.Column(db.Boolean, default=False)
 
     def __repr__(self) ->str:
         return f"{self.sno} - {self.title}"
@@ -34,7 +35,7 @@ def hello_world():
 
 @app.route("/show")
 def products():
-    allTodo = Todo.query.all()
+    allTodo = Todo.query.filter_by(completed=False).all()
     print(allTodo)
     return 'this is products page'
 
@@ -60,5 +61,20 @@ def delete(sno):
     print(todo)
     return redirect('/')
 
+@app.route("/complete/<int:sno>")
+def complete(sno):
+    todo = Todo.query.filter_by(sno=sno).first()
+    if todo:
+        todo.completed = True
+        db.session.commit()
+    return redirect('/')
+@app.route("/completed")
+def completed_tasks():
+    completed_todos =Todo.query.filter_by(completed=True).all()
+    return render_template('completed.html', allTodo=completed_todos)
+@app.route('/all_tasks')
+def all_tasks():
+    all_todos = Todo.query.all()
+    return render_template('all_task.html', allTodo=all_todos)
 if __name__ == '__main__':
     app.run(debug=True, port= 5000)
